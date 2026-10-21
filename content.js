@@ -3,7 +3,7 @@
 window.FOLDTYPE = {
   appStoreUrl: '',
   supportEmail: '',
-  logo: '', // e.g. images/foldtype-logo.webp — real supplied logo, when available
+  logo: 'images/foldtype-logo-256.webp', // Supplied Foldtype logo
   hero: {src: '', poster: '', alt: 'Foldtype in use'}, // MP4/WebM or an image
   animation: {src: '', poster: ''},
   screenshots: {

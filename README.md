@@ -4,9 +4,9 @@ A static site for `foldleafreader/foldtype`, adapted from the local `foldleafrea
 
 ## Design
 
-Retains the Foldleaf template's sticky navigation, centred product hero, large screenshot sections, scroll-linked statement, horizontal galleries, reveal transitions, and Support / Privacy / Press layouts. `style.css` and `home.css` are retained from Foldleaf; `foldtype.css` adds warm paper, dark ink, a red accent, serif headlines and typewriter details.
+Retains the Foldleaf template's sticky navigation, centred product hero, large screenshot sections, scroll-linked statement, horizontal galleries, reveal transitions, and Support / Privacy / Press layouts. `style.css` and `home.css` are retained from Foldleaf; `foldtype.css` adds warm paper, dark ink, a muted ink accent, serif headlines and typewriter details.
 
-The temporary monogram is **not** the supplied Foldtype logo. The supplied logo and JPG graphics could not yet be downloaded into the checkout. Import the final branding before treating the branding pass as complete.
+The supplied Foldtype logo, clean typewriter banner (`banner 1.jpg`) and scattered-letter background (`background 1.jpg`) are integrated. Optimised WebP sizes are used for the page, with the original logo and banner retained for downloads and social previews. Source files in the graphics folder are unchanged.
 
 ## Preview
 
@@ -24,8 +24,8 @@ Then open `http://localhost:8000`.
 
 | Replace | Configuration |
 | --- | --- |
-| Temporary monogram | `logo` |
-| Hero illustration | `hero.src`, `hero.poster`, `hero.alt` |
+| Brand logo | `logo` |
+| Hero banner | `hero.src`, `hero.poster`, `hero.alt` |
 | Animation placeholder | `animation.src`, `animation.poster` |
 | Main screenshot illustration | `screenshots.writing` |
 | Gallery placeholders | `screenshots.galleryOne`, `galleryTwo`, `galleryThree` |
@@ -36,7 +36,7 @@ Then open `http://localhost:8000`.
 
 Place approved media in `images/` with simple lowercase filenames. Paths must be relative, such as `images/foldtype-writing.webp`; leading `/` breaks deployment under the GitHub Pages project path. MP4 and WebM videos are supported in the hero and animation slots, with playback controls, no autoplay, and no eager video downloads.
 
-When replacing media, update placeholder captions and associated introductory text. Add the approved app privacy policy to `privacy.html`, update the FAQs in `support.html`, and complete the fact sheet and downloads in `press.html`. Update the favicon and social preview metadata when the real logo and graphics are imported. Headings accept trusted HTML from this configuration; do not populate it with untrusted user input.
+When replacing media, update placeholder captions and associated introductory text. Add the approved app privacy policy to `privacy.html`, update the FAQs in `support.html`, and complete the fact sheet and downloads in `press.html`. The favicon, Apple touch icon and social-sharing artwork use the supplied logo and banner. Headings accept trusted HTML from this configuration; do not populate it with untrusted user input.
 
 ## Deploy on GitHub Pages
 
