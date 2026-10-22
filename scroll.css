@@ -117,7 +117,25 @@
 }
 .platform-section { min-height: 62svh; padding-top: 50px; }
 .pencil-section h2 { font-size: clamp(36px, 5.2vw, 70px); }
-.penpals-section { min-height: 75svh; padding-top: 30px; }
+.penpals-section {
+  min-height: 75svh;
+  max-width: none;
+  padding-top: 30px;
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+}
+.penpals-section::before {
+  content: '';
+  position: absolute;
+  inset: 0 0 0 65%;
+  z-index: -1;
+  pointer-events: none;
+  background: url('images/type-scatter-800.webp') right bottom / cover no-repeat;
+  opacity: .16;
+  mask-image: linear-gradient(to right, transparent, #000 65%);
+  -webkit-mask-image: linear-gradient(to right, transparent, #000 65%);
+}
 .penpals-section h2 { font-size: clamp(35px, 4.9vw, 66px); max-width: 940px; }
 .closing-banner { max-width: 1160px; margin: 0 auto; padding: 25px 22px 70px; }
 .closing-banner picture, .closing-banner img { display: block; width: 100%; height: auto; }
@@ -143,6 +161,7 @@
   .quote-section blockquote p { font-size: 34px; }
   .quote-section cite { font-size: 10px; margin-top: 28px; }
   .penpals-section h2 { font-size: 36px; }
+  .penpals-section::before { left: 50%; opacity: .09; }
 }
 /* Reduced motion and data saving use regular, click-to-play videos. */
 .scroll-home.static-films .film-sticky { min-height: 0; padding-block: 30px; }
