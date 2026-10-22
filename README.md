@@ -10,13 +10,13 @@ The homepage is deliberately limited to this sequence:
 2. Foldtype.
 3. A typewriter in your pocket. / Available Oct. 2026 on Apple App Store.
 4. Mint typewriter animation, controlled by scrolling.
-5. No Copy. No Paste. No Distractions.
+5. No Copy. No Paste. No Distractions. Then, after a gap: Unfold your thoughts.
 6. Black typewriter animation, controlled by scrolling.
 7. The supplied Ernest Hemingway quotation.
 8. Also available on iPhone and iPad.
 9. iPad animation, controlled by scrolling.
 10. Unlock Apple Pencil annotations and highlights.
-11. Unfold your thoughts.
+11. Coming soon: send personal typewritten letters to penpals and friends.
 12. Supplied Foldtype banner.
 
 No extra homepage feature cards, galleries, FAQ, illustrations or footer. Support, Privacy and Press files remain available for the existing navigation and future content. The app's final privacy policy and contact details are still pending.
