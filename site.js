@@ -6,7 +6,7 @@
   const reduced = motionQuery.matches;
   const savingData = navigator.connection?.saveData === true;
   const canObserve = 'IntersectionObserver' in window;
-  const scrollFilms = !reduced && !savingData && canObserve;
+  const scrollFilms = !reduced && !savingData && canObserve && typeof window.FoldtypeScrubber === 'function';
   document.querySelectorAll('[data-year]').forEach(el => { el.textContent = new Date().getFullYear(); });
   if (config.logo) document.querySelectorAll('[data-brand-image]').forEach(image => { image.src = config.logo; });
   if (/^https:\/\/apps\.apple\.com\//.test(config.appStoreUrl || '')) {
@@ -61,7 +61,8 @@
   });
 
   let queued = false;
-  let headerHeight = parseFloat(getComputedStyle(document.body).getPropertyValue('--header-height')) || 64;
+  const measureHeader = () => document.querySelector('.topbar')?.getBoundingClientRect().height || 64;
+  let headerHeight = measureHeader();
   const requestFrame = () => {
     if (!queued) { queued = true; requestAnimationFrame(frame); }
   };
@@ -70,35 +71,34 @@
     const button = section.querySelector('[data-film-toggle]');
     const view = section.querySelector('.film-view');
     section.style.setProperty('--film-travel', `${Number(section.dataset.travel) || 160}svh`);
-    const state = {section, video, button, view, manual:!scrollFilms, loaded:false, target:0, visible:false};
+    const state = {section, video, button, view, manual:!scrollFilms, visible:false, needsGesture:false};
     video.muted = true;
     video.controls = !scrollFilms;
     button.hidden = !scrollFilms;
     if (!scrollFilms) section.classList.add('manual-film');
-    const seek = () => {
-      if (state.manual || !state.visible || video.seeking || video.readyState < 1 || !Number.isFinite(video.duration)) return;
-      if (Math.abs(video.currentTime - state.target) < 1 / 30) return;
-      try { video.currentTime = state.target; }
-      catch { /* Keep the poster and normal-play control available if a browser delays seeking. */ }
-    };
-    state.seek = seek;
-    state.load = () => {
-      if (state.loaded) return;
-      state.loaded = true;
-      video.preload = 'auto';
-      video.load();
-    };
-    video.addEventListener('loadedmetadata', requestFrame);
-    video.addEventListener('loadeddata', requestFrame);
-    video.addEventListener('seeked', seek);
+    state.scrubber = typeof window.FoldtypeScrubber === 'function' ? new window.FoldtypeScrubber(video, {
+      onBlocked: () => {
+        state.needsGesture = true; button.hidden = false; button.textContent = 'Enable animation';
+      },
+      onReady: () => {
+        state.needsGesture = false;
+        button.textContent = state.manual ? 'Use scroll animation' : 'Play video';
+        requestFrame();
+      }
+    }) : null;
+    state.scrubber?.setManual(state.manual);
+    state.load = () => state.scrubber?.load();
     video.addEventListener('error', () => {
       // Native playback exposes any media error and avoids a trapped, empty scroll track.
       state.manual = true; video.controls = true; button.hidden = true;
+      state.scrubber?.setManual(true);
       section.classList.add('manual-film');
       view.style.transform = ''; view.style.opacity = '';
     });
     button.addEventListener('click', () => {
+      if (state.needsGesture) { state.scrubber?.prime(true); return; }
       state.manual = !state.manual;
+      state.scrubber?.setManual(state.manual);
       video.controls = state.manual;
       view.classList.toggle('is-playing', state.manual);
       button.textContent = state.manual ? 'Use scroll animation' : 'Play video';
@@ -135,12 +135,12 @@
     films.forEach(state => {
       const rect = state.section.getBoundingClientRect();
       state.visible = rect.top < viewport && rect.bottom > headerHeight;
+      const progress = clamp((headerHeight - rect.top) / Math.max(1, rect.height - viewport + headerHeight));
+      state.scrubber?.setProgress(progress);
+      state.scrubber?.setActive(state.visible && !document.hidden);
       if (!state.visible && !state.video.paused) state.video.pause();
       if (!scrollFilms || state.section.classList.contains('manual-film')) return;
       if (state.visible) {
-        const progress = clamp((headerHeight - rect.top) / Math.max(1, rect.height - viewport + headerHeight));
-        if (Number.isFinite(state.video.duration)) state.target = progress * Math.max(0, state.video.duration - .067);
-        if (!state.manual) state.seek();
         const entry = clamp((viewport - rect.top) / (viewport - headerHeight));
         const exit = clamp((rect.bottom - headerHeight) / (viewport - headerHeight));
         const exposure = Math.min(entry,exit);
@@ -151,11 +151,11 @@
   }
   addEventListener('scroll', requestFrame, {passive:true});
   addEventListener('resize', () => {
-    headerHeight = parseFloat(getComputedStyle(document.body).getPropertyValue('--header-height')) || 64;
+    headerHeight = measureHeader();
     requestFrame();
   });
   document.addEventListener('visibilitychange', () => {
-    if (document.hidden) films.forEach(state => state.video.pause());
+    if (document.hidden) films.forEach(state => { state.scrubber?.setActive(false); state.video.pause(); });
     else requestFrame();
   });
   motionQuery.addEventListener('change', event => {
@@ -164,6 +164,7 @@
     document.body.classList.add('static-films');
     films.forEach(state => {
       state.manual = true; state.video.pause(); state.video.controls = true;
+      state.scrubber?.setManual(true);
       state.section.classList.add('manual-film'); state.button.hidden = true;
       state.view.style.transform = ''; state.view.style.opacity = '';
     });
@@ -171,5 +172,7 @@
     inkBlocks.length = 0;
     pieces.forEach(el => el.classList.add('in'));
   });
+  addEventListener('pageshow', requestFrame);
+  document.fonts?.ready.then(requestFrame);
   frame();
 })();

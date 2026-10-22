@@ -27,11 +27,11 @@ The paper background keeps the original colour with a small tiled grain overlay.
 
 ## Scroll animation
 
-`site.js` maps each pinned video section's scroll progress to the video timeline. Scrolling back reverses it. Only videos approaching the viewport are asked to preload; seeking is limited to visible sections and serialized through the browser's `seeked` event. Frame updates run on animation frames requested by scrolling, resizing or media readiness, rather than an idle animation loop.
+`site.js` maps each pinned video section's scroll progress to the video timeline through `scroll-video.js`. Scrolling back reverses it. Only videos approaching the viewport are asked to preload. The controller initializes decoding with a brief muted play/pause, waits for decoded data, keeps the latest scroll target during a seek, and retries or reloads once if a seek stalls. If the browser requires a gesture, an **Enable animation** button unlocks the scroll timeline. Recovery timers stop when the target is displayed or the section leaves the viewport. Frame updates run on animation frames requested by scrolling, resizing, media readiness or page restoration, rather than an idle animation loop.
 
 Text fades from light ink to full ink word by word, with subtle scale/fade transitions for the video frames. Each clip also offers a **Play video** control to switch to normal playback. Returning to **Use scroll animation** restores the current scroll position on the video timeline.
 
-Reduced motion, data-saving mode and browsers without IntersectionObserver use regular click-to-play videos with short page sections. Without JavaScript, the page stays visible and the videos keep their native controls. No autoplay is used. Hidden or offscreen videos are paused.
+Reduced motion, data-saving mode and browsers without IntersectionObserver use regular click-to-play videos with short page sections. Without JavaScript, the page stays visible and the videos keep their native controls. Hidden or offscreen videos are paused.
 
 ## Media
 
@@ -58,3 +58,5 @@ Open `index.html` directly, or run `python3 -m http.server 8000` from this check
 ## Verification
 
 Static validation covers the requested content order, unchanged header, local links and assets, JavaScript syntax, deploy-file inclusion, video durations/codecs/keyframe spacing and full video decoding. Browser visual and mobile playback QA could not run in the restricted creation session. Check scroll seeking on desktop and iPhone Safari, normal playback, reduced motion and iPad image quality before launch.
+
+Controller regression tests cover delayed readiness, decoder startup, rapid changes in scroll direction, missing/stalled seek events (including buffering), bounded reload recovery, gesture blocking and manual playback. Run with `node tests/scroll-video.test.js`; the tests also run in a standalone JavaScript engine without browser or network access.
