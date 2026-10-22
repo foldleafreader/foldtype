@@ -189,3 +189,6 @@
   .scroll-word { opacity: 1 !important; }
   .film-view { transform: none !important; opacity: 1 !important; }
 }
+@media (max-width: 640px) {
+  .scroll-home { --header-height: 88px; }
+}
