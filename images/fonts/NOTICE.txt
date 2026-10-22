@@ -1,0 +1,3 @@
+Special Elite: Copyright (c) 2010 by Brian J. Bonislawsky DBA Astigmatic (AOETI). Licensed under Apache 2.0; see SpecialElite-Apache-2.0.txt.
+Courier Prime: Copyright 2015 The Courier Prime Project Authors. Licensed under SIL OFL 1.1; see CourierPrime-OFL.txt.
+These copies were converted from TTF to WOFF for web delivery. Glyphs and font naming were not changed.

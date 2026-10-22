@@ -16,12 +16,14 @@ The homepage is deliberately limited to this sequence:
 8. Also available on iPhone and iPad.
 9. iPad animation, controlled by scrolling.
 10. Unlock Apple Pencil annotations and highlights.
-11. Coming soon: send personal typewritten letters to penpals and friends.
+11. Coming soon: Foldtype Penpals.
 12. Supplied Foldtype banner.
 
 No extra homepage feature cards, galleries, FAQ, illustrations or footer. Support, Privacy and Press files remain available for the existing navigation and future content. The app's final privacy policy and contact details are still pending.
 
 Edit homepage copy and media paths directly in `index.html`. `content.js` holds shared logo, contact and App Store configuration. `scroll.css` contains the homepage layout; `style.css`, `home.css` and `foldtype.css` retain shared template/document styling.
+
+The paper background keeps the original colour with a small tiled grain overlay. Special Elite provides the worn typewriter headings; Courier Prime provides readable body and navigation text. Both fonts are served locally from `images/fonts/` with their licences. The iPhone/iPad availability heading is smaller than the main statements.
 
 ## Scroll animation
 

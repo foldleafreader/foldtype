@@ -1,3 +1,17 @@
+@font-face {
+  font-family: 'Foldtype Typewriter';
+  src: url('images/fonts/special-elite.woff') format('woff');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Foldtype Courier';
+  src: url('images/fonts/courier-prime.woff') format('woff');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
 /* Foldtype adaptation of the Foldleaf product-page template.
    Foldleaf's sticky bar, sections, galleries and document layouts are retained. */
 :root{--paper:#f5f1e8;--ink:#292820;--muted:#6e695f;--leaf:#51473c;--line:#d9d1c4;--card:#fffdf7;--serif:Georgia,'Times New Roman',serif;--mono:'Courier New',Courier,monospace;color-scheme:light}
@@ -14,3 +28,19 @@ html{scroll-behavior:smooth}body{font-size:16px}.home{overflow-x:clip}button{fon
 .finale{position:relative;isolation:isolate;overflow:hidden}
 .finale::before{content:'';position:absolute;inset:0 0 0 65%;z-index:-1;background:url('images/type-scatter-800.webp') center / cover no-repeat;opacity:.16;mask-image:linear-gradient(to right,transparent,#000 65%);-webkit-mask-image:linear-gradient(to right,transparent,#000 65%)}
 @media(max-width:480px){.hero h1{font-size:67px;letter-spacing:-6px}.finale::before{left:50%;opacity:.09}}
+
+/* The app's own typewriter faces, with paper grain over the existing colour. */
+:root {
+  --typewriter: 'Foldtype Typewriter', 'American Typewriter', 'Courier New', monospace;
+  --serif: var(--typewriter);
+  --mono: 'Foldtype Courier', 'Courier New', monospace;
+}
+body {
+  font-family: var(--mono);
+  background-color: var(--paper);
+  background-image: url('images/paper-grain.svg'),
+    repeating-linear-gradient(0deg, #68523a03 0, #68523a03 1px, transparent 1px, transparent 4px);
+  background-size: 240px 240px, 100% 4px;
+  background-blend-mode: soft-light, multiply;
+}
+.brand { font-weight: 400; }
