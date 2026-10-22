@@ -1,14 +1,14 @@
-/* Adapted from Foldleaf's reveal, scroll-linked statement and gallery controls. */
+/* Shared page setup, with scroll-linked films and text on the home page. */
 (() => {
   'use strict';
   const config = window.FOLDTYPE || {};
-  const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const motionQuery = matchMedia('(prefers-reduced-motion: reduce)');
+  const reduced = motionQuery.matches;
+  const savingData = navigator.connection?.saveData === true;
+  const canObserve = 'IntersectionObserver' in window;
+  const scrollFilms = !reduced && !savingData && canObserve;
   document.querySelectorAll('[data-year]').forEach(el => { el.textContent = new Date().getFullYear(); });
-  document.querySelectorAll('[data-copy]').forEach(el => {
-    const copy = config.copy?.[el.dataset.copy];
-    if (typeof copy === 'string') el.innerHTML = copy;
-  });
-  if (config.logo) document.querySelectorAll('[data-brand-image]').forEach(image => { image.src = config.logo; image.alt = ''; });
+  if (config.logo) document.querySelectorAll('[data-brand-image]').forEach(image => { image.src = config.logo; });
   if (/^https:\/\/apps\.apple\.com\//.test(config.appStoreUrl || '')) {
     document.querySelectorAll('[data-store-link]').forEach(link => {
       link.href = config.appStoreUrl;
@@ -18,93 +18,158 @@
   }
   if (/^[^\s@?]+@[^\s@?]+\.[^\s@?]+$/.test(config.supportEmail || '')) {
     document.querySelectorAll('[data-support-email]').forEach(el => {
-      const link = document.createElement('a'); link.href = 'mailto:' + config.supportEmail;
-      link.textContent = config.supportEmail; el.replaceChildren(link);
+      const link = document.createElement('a');
+      link.href = 'mailto:' + config.supportEmail;
+      link.textContent = config.supportEmail;
+      el.replaceChildren(link);
     });
     document.querySelectorAll('[data-support-pending]').forEach(el => { el.hidden = true; });
   }
-  const makeMedia = (media, videoAllowed) => {
-    if (!media?.src) return null;
-    const video = videoAllowed && /\.(mp4|webm)(?:[?#]|$)/i.test(media.src);
-    const el = document.createElement(video ? 'video' : 'img');
-    el.src = media.src;
-    if (video) {
-      el.controls = true; el.playsInline = true; el.preload = 'none';
-      el.className = 'media-video'; el.setAttribute('aria-label', media.alt || 'Foldtype preview');
-      if (media.poster) el.poster = media.poster;
-    } else {
-      el.alt = media.alt || 'Foldtype'; el.loading = 'lazy'; el.decoding = 'async'; el.className = 'media-image';
-    }
-    return el;
+
+  const pieces = document.querySelectorAll('.reveal');
+  if (reduced || !canObserve) pieces.forEach(el => el.classList.add('in'));
+  else {
+    const reveal = new IntersectionObserver(entries => entries.forEach(entry => {
+      if (entry.isIntersecting) { entry.target.classList.add('in'); reveal.unobserve(entry.target); }
+    }), {rootMargin:'0px 0px -4% 0px', threshold:0.05});
+    pieces.forEach(el => reveal.observe(el));
+  }
+  document.documentElement.classList.add('js');
+  if (!document.body.classList.contains('scroll-home')) return;
+
+  const clamp = value => Math.max(0, Math.min(1, value));
+  const inkBlocks = [];
+  if (!reduced && canObserve) document.querySelectorAll('[data-ink]').forEach(element => {
+    // Walk text nodes so line breaks and any inline markup retain their meaning.
+    const walker = document.createTreeWalker(element, NodeFilter.SHOW_TEXT);
+    const nodes = [];
+    while (walker.nextNode()) nodes.push(walker.currentNode);
+    const words = [];
+    nodes.forEach(node => {
+      const fragment = document.createDocumentFragment();
+      node.textContent.split(/(\s+)/).filter(Boolean).forEach(part => {
+        if (/^\s+$/.test(part)) fragment.append(document.createTextNode(part));
+        else {
+          const word = document.createElement('span');
+          word.className = 'scroll-word'; word.textContent = part;
+          fragment.append(word); words.push(word);
+        }
+      });
+      node.replaceWith(fragment);
+    });
+    inkBlocks.push({element, words});
+  });
+
+  let queued = false;
+  let headerHeight = parseFloat(getComputedStyle(document.body).getPropertyValue('--header-height')) || 64;
+  const requestFrame = () => {
+    if (!queued) { queued = true; requestAnimationFrame(frame); }
   };
-  [['[data-hero-media]', config.hero], ['[data-animation-slot]', config.animation]].forEach(([selector, media]) => {
-    const slot = document.querySelector(selector); const element = makeMedia(media, true);
-    if (slot && element) { slot.replaceChildren(element); slot.classList.add('has-media'); slot.removeAttribute('aria-label'); }
+  const films = [...document.querySelectorAll('[data-film]')].map(section => {
+    const video = section.querySelector('video');
+    const button = section.querySelector('[data-film-toggle]');
+    const view = section.querySelector('.film-view');
+    section.style.setProperty('--film-travel', `${Number(section.dataset.travel) || 160}svh`);
+    const state = {section, video, button, view, manual:!scrollFilms, loaded:false, target:0, visible:false};
+    video.muted = true;
+    video.controls = !scrollFilms;
+    button.hidden = !scrollFilms;
+    if (!scrollFilms) section.classList.add('manual-film');
+    const seek = () => {
+      if (state.manual || !state.visible || video.seeking || video.readyState < 1 || !Number.isFinite(video.duration)) return;
+      if (Math.abs(video.currentTime - state.target) < 1 / 30) return;
+      try { video.currentTime = state.target; }
+      catch { /* Keep the poster and normal-play control available if a browser delays seeking. */ }
+    };
+    state.seek = seek;
+    state.load = () => {
+      if (state.loaded) return;
+      state.loaded = true;
+      video.preload = 'auto';
+      video.load();
+    };
+    video.addEventListener('loadedmetadata', requestFrame);
+    video.addEventListener('loadeddata', requestFrame);
+    video.addEventListener('seeked', seek);
+    video.addEventListener('error', () => {
+      // Native playback exposes any media error and avoids a trapped, empty scroll track.
+      state.manual = true; video.controls = true; button.hidden = true;
+      section.classList.add('manual-film');
+      view.style.transform = ''; view.style.opacity = '';
+    });
+    button.addEventListener('click', () => {
+      state.manual = !state.manual;
+      video.controls = state.manual;
+      view.classList.toggle('is-playing', state.manual);
+      button.textContent = state.manual ? 'Use scroll animation' : 'Play video';
+      if (state.manual) {
+        state.load();
+        video.play().catch(() => { /* The visible native play control remains available. */ });
+      } else {
+        video.pause(); requestFrame();
+      }
+    });
+    return state;
   });
-  document.querySelectorAll('[data-screenshot-slot]').forEach(slot => {
-    const media = config.screenshots?.[slot.dataset.screenshotSlot]; const image = makeMedia(media, false);
-    if (!image) return;
-    const caption = slot.querySelector('figcaption');
-    slot.replaceChildren(image);
-    if (caption) { caption.textContent = media.caption || media.alt || 'Foldtype'; slot.append(caption); }
-    slot.classList.add('has-media');
-  });
-  const statement = document.querySelector('[data-statement]');
-  if (statement) {
-    const words = statement.textContent.trim().split(/\s+/);
-    statement.replaceChildren();
-    words.forEach((word, i) => {
-      if (i) statement.append(document.createTextNode(' '));
-      const span = document.createElement('span'); span.className = 'w'; span.textContent = word; statement.append(span);
+  document.body.classList.add(scrollFilms ? 'has-scroll-films' : 'static-films');
+  if (scrollFilms) {
+    const nearby = new IntersectionObserver(entries => entries.forEach(entry => {
+      if (!entry.isIntersecting) return;
+      films.find(state => state.section === entry.target)?.load();
+      nearby.unobserve(entry.target);
+    }), {rootMargin:'100% 0px',threshold:0});
+    films.forEach(state => nearby.observe(state.section));
+  }
+
+  function frame() {
+    queued = false;
+    const viewport = innerHeight;
+    inkBlocks.forEach(({element,words}) => {
+      const rect = element.getBoundingClientRect();
+      const progress = clamp((viewport * .84 - rect.top) / Math.max(rect.height + viewport * .25, 1));
+      words.forEach((word,index) => {
+        const amount = clamp(progress * (words.length + 1) - index);
+        word.style.setProperty('--word-opacity', String(.18 + .82 * amount));
+      });
+    });
+    films.forEach(state => {
+      const rect = state.section.getBoundingClientRect();
+      state.visible = rect.top < viewport && rect.bottom > headerHeight;
+      if (!state.visible && !state.video.paused) state.video.pause();
+      if (!scrollFilms || state.section.classList.contains('manual-film')) return;
+      if (state.visible) {
+        const progress = clamp((headerHeight - rect.top) / Math.max(1, rect.height - viewport + headerHeight));
+        if (Number.isFinite(state.video.duration)) state.target = progress * Math.max(0, state.video.duration - .067);
+        if (!state.manual) state.seek();
+        const entry = clamp((viewport - rect.top) / (viewport - headerHeight));
+        const exit = clamp((rect.bottom - headerHeight) / (viewport - headerHeight));
+        const exposure = Math.min(entry,exit);
+        state.view.style.transform = `translateY(${(1-exposure)*20}px) scale(${.96+.04*exposure})`;
+        state.view.style.opacity = String(.25+.75*exposure);
+      }
     });
   }
-  // Enable animation styling only after content setup succeeds. Without JS, all content stays visible.
-  document.documentElement.classList.add('js');
-  const pieces = document.querySelectorAll('.reveal');
-  if (reduced || !('IntersectionObserver' in window)) pieces.forEach(el => el.classList.add('in'));
-  else {
-    const observer = new IntersectionObserver(entries => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) { entry.target.classList.add('in'); observer.unobserve(entry.target); }
-      });
-    }, {rootMargin:'0px 0px -5% 0px', threshold:0.05});
-    pieces.forEach(el => observer.observe(el));
-  }
-  document.querySelectorAll('.paddles button').forEach(button => button.addEventListener('click', () => {
-    const gallery = document.getElementById(button.dataset.for);
-    if (!gallery) return;
-    const start = gallery.getBoundingClientRect().left + (parseFloat(getComputedStyle(gallery).scrollPaddingLeft) || 0);
-    const positions = [...gallery.children].map(child => child.getBoundingClientRect().left - start);
-    const next = Number(button.dataset.dir) > 0 ? positions.find(x => x > 2) : positions.reverse().find(x => x < -2);
-    if (next !== undefined) gallery.scrollBy({left:next,behavior:reduced ? 'auto' : 'smooth'});
-  }));
-  const fitted = () => document.querySelectorAll('.paddles').forEach(paddles => {
-    const gallery = document.getElementById(paddles.querySelector('button').dataset.for);
-    paddles.hidden = !gallery || gallery.scrollWidth <= gallery.clientWidth + 1;
+  addEventListener('scroll', requestFrame, {passive:true});
+  addEventListener('resize', () => {
+    headerHeight = parseFloat(getComputedStyle(document.body).getPropertyValue('--header-height')) || 64;
+    requestFrame();
   });
-  fitted(); addEventListener('resize', fitted);
-  document.querySelectorAll('.gallery img').forEach(image => image.addEventListener('load', fitted));
-  if (reduced || !('IntersectionObserver' in window)) {
-    document.querySelectorAll('.statement .w').forEach(word => word.classList.add('lit')); return;
-  }
-  const words = [...document.querySelectorAll('.statement .w')];
-  const sentence = document.querySelector('.statement');
-  const scene = document.querySelector('.typewriter-scene');
-  const clamp = value => Math.min(1, Math.max(0, value));
-  let queued = false;
-  const frame = () => {
-    queued = false;
-    if (scene) {
-      const progress = clamp(1 - (scene.parentElement.getBoundingClientRect().top - innerHeight * .1) / (innerHeight * .65));
-      scene.style.transform = `rotateX(${(1-progress)*8}deg) scale(${.96+.04*progress})`;
-    }
-    if (sentence) {
-      const bounds = sentence.getBoundingClientRect();
-      const progress = clamp((innerHeight * .78 - bounds.top) / (bounds.height * .75));
-      const count = Math.round(progress * words.length);
-      words.forEach((word,i) => word.classList.toggle('lit',i < count));
-    }
-  };
-  const ask = () => { if (!queued) { queued = true; requestAnimationFrame(frame); } };
-  addEventListener('scroll',ask,{passive:true}); addEventListener('resize',ask); frame();
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden) films.forEach(state => state.video.pause());
+    else requestFrame();
+  });
+  motionQuery.addEventListener('change', event => {
+    if (!event.matches) return; // Re-enabling motion takes effect on the next visit.
+    document.body.classList.remove('has-scroll-films');
+    document.body.classList.add('static-films');
+    films.forEach(state => {
+      state.manual = true; state.video.pause(); state.video.controls = true;
+      state.section.classList.add('manual-film'); state.button.hidden = true;
+      state.view.style.transform = ''; state.view.style.opacity = '';
+    });
+    inkBlocks.forEach(({words}) => words.forEach(word => word.style.setProperty('--word-opacity','1')));
+    inkBlocks.length = 0;
+    pieces.forEach(el => el.classList.add('in'));
+  });
+  frame();
 })();

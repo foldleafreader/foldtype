@@ -1,53 +1,58 @@
 # Foldtype website
 
-A static site for `foldleafreader/foldtype`, adapted from the local `foldleafreader/foldleaf` template. No build tools or package installation required.
+Static GitHub Pages website for `foldleafreader/foldtype`, using the Foldleaf template's shared header, paper/ink styling, reveal transitions and document pages.
 
-## Design
+## Home page
 
-Retains the Foldleaf template's sticky navigation, centred product hero, large screenshot sections, scroll-linked statement, horizontal galleries, reveal transitions, and Support / Privacy / Press layouts. `style.css` and `home.css` are retained from Foldleaf; `foldtype.css` adds warm paper, dark ink, a muted ink accent, serif headlines and typewriter details.
+The homepage is deliberately limited to this sequence:
 
-The supplied Foldtype logo, clean typewriter banner (`banner 1.jpg`) and scattered-letter background (`background 1.jpg`) are integrated. Optimised WebP sizes are used for the page, with the original logo and banner retained for downloads and social previews. Source files in the graphics folder are unchanged.
+1. Existing header.
+2. Foldtype.
+3. A typewriter in your pocket. / Available Oct. 2026 on Apple App Store.
+4. Mint typewriter animation, controlled by scrolling.
+5. No Copy. No Paste. No Distractions.
+6. Black typewriter animation, controlled by scrolling.
+7. The supplied Ernest Hemingway quotation.
+8. Also available on iPhone and iPad.
+9. iPad animation, controlled by scrolling.
+10. Unlock Apple Pencil annotations and highlights.
+11. Coming soon: send personal typewritten letters to penpals and friends.
+12. Supplied Foldtype banner.
+
+No extra homepage feature cards, galleries, FAQ, illustrations or footer. Support, Privacy and Press files remain available for the existing navigation and future content. The app's final privacy policy and contact details are still pending.
+
+Edit homepage copy and media paths directly in `index.html`. `content.js` holds shared logo, contact and App Store configuration. `scroll.css` contains the homepage layout; `style.css`, `home.css` and `foldtype.css` retain shared template/document styling.
+
+## Scroll animation
+
+`site.js` maps each pinned video section's scroll progress to the video timeline. Scrolling back reverses it. Only videos approaching the viewport are asked to preload; seeking is limited to visible sections and serialized through the browser's `seeked` event. Frame updates run on animation frames requested by scrolling, resizing or media readiness, rather than an idle animation loop.
+
+Text fades from light ink to full ink word by word, with subtle scale/fade transitions for the video frames. Each clip also offers a **Play video** control to switch to normal playback. Returning to **Use scroll animation** restores the current scroll position on the video timeline.
+
+Reduced motion, data-saving mode and browsers without IntersectionObserver use regular click-to-play videos with short page sections. Without JavaScript, the page stays visible and the videos keep their native controls. No autoplay is used. Hidden or offscreen videos are paused.
+
+## Media
+
+Web copies are in `media/`, with poster images in `images/`. Originals in the desktop Blender folder were left unchanged.
+
+| Source | Web asset | Duration | Resolution | Size |
+| --- | --- | --- | --- | --- |
+| Foldtype-mint-pullback.mp4 | mint-typewriter.mp4 | 18 s | 1280×720, 30 fps | 2.95 MB |
+| Foldtype-new-clips-transition-test.mp4 | black-typewriter.mp4 | 10 s | 1280×720, 30 fps | 1.37 MB |
+| Foldtype-iPad-recorded-preview.mp4 | ipad-typewriter.mp4 | 18 s | 640×360, 15 fps | 1.24 MB |
+
+Total: approximately 5.6 MB (decimal). H.264, frequent keyframes (0.4 seconds), no B-frames, muted/silent video and fast-start metadata support timeline seeking. Scroll copies omit audio because scrubbing is silent. All frames, full durations and source resolutions are retained. Replace the low-resolution iPad clip and poster when final footage is ready.
+
+The supplied F. logo and clean typewriter banner are used directly, with WebP variants, PNG favicons and original JPG downloads/social preview artwork. Source graphics are unchanged.
 
 ## Preview
 
-Open `index.html` directly, or use a local server:
+Open `index.html` directly, or run `python3 -m http.server 8000` from this checkout and visit `http://localhost:8000`.
 
-```sh
-python3 -m http.server 8000
-```
+## Deployment
 
-Then open `http://localhost:8000`.
-
-## Content and media
-
-`content.js` centralises the main marketing copy, App Store URL, support email, logo, screenshots and video paths. The draft contains no fabricated reviews, pricing, release dates, or final app privacy claims. Support, Privacy and Press intentionally have pending content.
-
-| Replace | Configuration |
-| --- | --- |
-| Brand logo | `logo` |
-| Hero banner | `hero.src`, `hero.poster`, `hero.alt` |
-| Animation placeholder | `animation.src`, `animation.poster` |
-| Main screenshot illustration | `screenshots.writing` |
-| Gallery placeholders | `screenshots.galleryOne`, `galleryTwo`, `galleryThree` |
-| iPhone Duo showcase | `screenshots.duo` |
-| Download links | `appStoreUrl` — exact `https://apps.apple.com/...` URL |
-| Support and press contact | `supportEmail` |
-| Main copy | `copy` |
-
-Place approved media in `images/` with simple lowercase filenames. Paths must be relative, such as `images/foldtype-writing.webp`; leading `/` breaks deployment under the GitHub Pages project path. MP4 and WebM videos are supported in the hero and animation slots, with playback controls, no autoplay, and no eager video downloads.
-
-When replacing media, update placeholder captions and associated introductory text. Add the approved app privacy policy to `privacy.html`, update the FAQs in `support.html`, and complete the fact sheet and downloads in `press.html`. The favicon, Apple touch icon and social-sharing artwork use the supplied logo and banner. Headings accept trusted HTML from this configuration; do not populate it with untrusted user input.
-
-## Deploy on GitHub Pages
-
-The workflow at `.github/workflows/pages.yml` publishes only the site's HTML, CSS, JavaScript and `images/` directory. It does not publish repository documentation.
-
-1. Push this checkout's `main` branch to `https://github.com/foldleafreader/foldtype.git`.
-2. In repository **Settings → Pages → Build and deployment**, choose **GitHub Actions** as the source.
-3. Check **Actions → Deploy Foldtype to GitHub Pages**. If needed, run it manually from that workflow's page after enabling Pages.
-
-The default URL is expected to be `https://foldleafreader.github.io/foldtype/`, subject to repository and custom-domain settings. Deployment has not been verified.
+`.github/workflows/pages.yml` publishes the HTML, CSS, JavaScript, `images/` and `media/` directories. Push `main`, select **GitHub Actions** in repository **Settings → Pages**, and check the workflow result. The expected URL is `https://foldleafreader.github.io/foldtype/`, subject to repository settings.
 
 ## Verification
 
-Before launch, visually check desktop and narrow mobile layouts, navigation, gallery controls, support disclosures, reduced-motion behaviour, and final media. Browser QA was unavailable in the restricted creation session. HTML local links, asset references, JavaScript syntax and template retention were checked locally.
+Static validation covers the requested content order, unchanged header, local links and assets, JavaScript syntax, deploy-file inclusion, video durations/codecs/keyframe spacing and full video decoding. Browser visual and mobile playback QA could not run in the restricted creation session. Check scroll seeking on desktop and iPhone Safari, normal playback, reduced motion and final iPad image quality before launch.

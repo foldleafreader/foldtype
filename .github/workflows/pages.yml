@@ -22,8 +22,9 @@ jobs:
       - name: Prepare public files
         run: |
           mkdir _site
-          cp index.html support.html privacy.html press.html style.css home.css foldtype.css content.js site.js .nojekyll _site/
+          cp index.html support.html privacy.html press.html style.css home.css foldtype.css scroll.css content.js site.js .nojekyll _site/
           cp -R images _site/images
+          cp -R media _site/media
       - uses: actions/upload-pages-artifact@v3
         with:
           path: _site
