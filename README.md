@@ -41,9 +41,9 @@ Web copies are in `media/`, with poster images in `images/`. Originals in the de
 | --- | --- | --- | --- | --- |
 | Foldtype-mint-pullback.mp4 | mint-typewriter.mp4 | 18 s | 1280×720, 30 fps | 2.95 MB |
 | Foldtype-new-clips-transition-test.mp4 | black-typewriter.mp4 | 10 s | 1280×720, 30 fps | 1.37 MB |
-| Foldtype-iPad-recorded-preview.mp4 | ipad-typewriter.mp4 | 18 s | 640×360, 15 fps | 1.24 MB |
+| Foldtype-iPad-promo-lit.mp4 | ipad-typewriter-hd.mp4 | 10 s | 1920×1080, 30 fps | 3.55 MB |
 
-Total: approximately 5.6 MB (decimal). H.264, frequent keyframes (0.4 seconds), no B-frames, muted/silent video and fast-start metadata support timeline seeking. Scroll copies omit audio because scrubbing is silent. All frames, full durations and source resolutions are retained. Replace the low-resolution iPad clip and poster when final footage is ready.
+Total: approximately 7.9 MB (decimal). H.264, frequent keyframes (0.4 seconds), no B-frames, muted/silent video and fast-start metadata support timeline seeking. Scroll copies omit audio because scrubbing is silent. All frames, full durations and source resolutions are retained. The iPad clip and poster use the finished, correctly lit full-HD promo edit.
 
 The supplied F. logo and clean typewriter banner are used directly, with WebP variants, PNG favicons and original JPG downloads/social preview artwork. Source graphics are unchanged.
 
@@ -57,4 +57,4 @@ Open `index.html` directly, or run `python3 -m http.server 8000` from this check
 
 ## Verification
 
-Static validation covers the requested content order, unchanged header, local links and assets, JavaScript syntax, deploy-file inclusion, video durations/codecs/keyframe spacing and full video decoding. Browser visual and mobile playback QA could not run in the restricted creation session. Check scroll seeking on desktop and iPhone Safari, normal playback, reduced motion and final iPad image quality before launch.
+Static validation covers the requested content order, unchanged header, local links and assets, JavaScript syntax, deploy-file inclusion, video durations/codecs/keyframe spacing and full video decoding. Browser visual and mobile playback QA could not run in the restricted creation session. Check scroll seeking on desktop and iPhone Safari, normal playback, reduced motion and iPad image quality before launch.
