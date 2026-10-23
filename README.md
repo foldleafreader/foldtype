@@ -19,7 +19,7 @@ The homepage is deliberately limited to this sequence:
 11. Coming soon: Foldtype Penpals.
 12. Supplied Foldtype banner.
 
-No extra homepage feature cards, galleries, FAQ, illustrations or footer. Support, Privacy and Press files remain available for the existing navigation and future content. The app's final privacy policy and contact details are still pending.
+The homepage has no extra feature cards, galleries, FAQ or illustrations. A small Support / Privacy footer provides direct access to the completed public pages. Press remains a separate draft and is not linked from the public footer.
 
 Edit homepage copy and media paths directly in `index.html`. `content.js` holds shared logo, contact and App Store configuration. `scroll.css` contains the homepage layout; `style.css`, `home.css` and `foldtype.css` retain shared template/document styling.
 
@@ -54,6 +54,18 @@ Open `index.html` directly, or run `python3 -m http.server 8000` from this check
 ## Deployment
 
 `.github/workflows/pages.yml` publishes the HTML, CSS, JavaScript, `images/` and `media/` directories. Push `main`, select **GitHub Actions** in repository **Settings → Pages**, and check the workflow result. The expected URL is `https://foldleafreader.github.io/foldtype/`, subject to repository settings.
+
+## App Store support and privacy
+
+- Support URL: `https://foldleafreader.github.io/foldtype/support.html`
+- Privacy Policy URL: `https://foldleafreader.github.io/foldtype/privacy.html`
+- Public support and privacy contact: `foldleafreader@gmail.com` (Tevong You).
+
+Both pages work without JavaScript or login, and provide direct email links. The support page covers permanent unlocks, restoring purchases, the non-renewing 7-day marking trial, local storage, Bin recovery, export, input methods and problem reports. The privacy page describes public v1 data handling, local history/Keychain storage, Apple purchases, optional sharing/recording, Penpals' coming-soon status, retention/deletion, voluntary support correspondence and GitHub Pages hosting.
+
+App behaviour was verified against the `foldtype-v1-release` checkout, including `Resources/Licenses/PublicV1Privacy.txt`, the public privacy manifest (no collected data or tracking), the public entitlements, StoreKit purchase implementation and `FOLDTYPE_PUBLIC_V1` account gates. The app already exposes its public v1 privacy policy in Settings → About & Licences → Privacy Policy. The internal-development Penpals configuration is not the basis for this website policy.
+
+Requirements checked: [Apple's Support URL field](https://developer.apple.com/help/app-store-connect/reference/app-information/platform-version-information/) and [App Review Guideline 5.1.1](https://developer.apple.com/app-store/review/guidelines/#data-collection-and-storage). Confirm the public URLs load after deployment before using them in App Store Connect, and keep App Privacy answers and any future in-app policy changes consistent with the release actually submitted. No App Store Connect fields or app source files were changed by this website task.
 
 ## Verification
 
