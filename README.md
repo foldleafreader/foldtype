@@ -59,7 +59,7 @@ Open `index.html` directly, or run `python3 -m http.server 8000` from this check
 
 - Support URL: `https://foldleafreader.github.io/foldtype/support.html`
 - Privacy Policy URL: `https://foldleafreader.github.io/foldtype/privacy.html`
-- Public support and privacy contact: `foldleafreader@gmail.com` (Tevong You).
+- Public support and privacy contact: `foldtypesupport@gmail.com` (Tevong You).
 
 Both pages work without JavaScript or login, and provide direct email links. The support page covers permanent unlocks, restoring purchases, the non-renewing 7-day marking trial, local storage, Bin recovery, export, input methods and problem reports. The privacy page describes public v1 data handling, local history/Keychain storage, Apple purchases, optional sharing/recording, Penpals' coming-soon status, retention/deletion, voluntary support correspondence and GitHub Pages hosting.
 
