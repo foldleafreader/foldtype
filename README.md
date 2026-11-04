@@ -8,7 +8,7 @@ The homepage is deliberately limited to this sequence:
 
 1. Existing header.
 2. Foldtype.
-3. A typewriter in your pocket. / Available Oct. 2026 on Apple App Store.
+3. A typewriter in your pocket. / Available now on the App Store.
 4. Mint typewriter animation, controlled by scrolling.
 5. No Copy. No Paste. No Distractions. Then, after a gap: Unfold your thoughts.
 6. Black typewriter animation, controlled by scrolling.
