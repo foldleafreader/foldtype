@@ -32,6 +32,14 @@
   line-height: 1.8;
   color: var(--muted);
 }
+.opening-availability a {
+  color: inherit;
+  text-decoration: underline;
+  text-decoration-color: var(--line);
+  text-underline-offset: 3px;
+}
+.opening-availability a:hover,
+.opening-availability a:focus-visible { color: var(--ink); text-decoration-color: currentColor; }
 .scroll-film { position: relative; margin: 0; padding: 0 22px; }
 .film-sticky {
   min-height: min(760px, calc(100svh - var(--header-height)));
