@@ -2,7 +2,7 @@
 (() => {
   'use strict';
   class FoldtypeScrubber {
-    constructor(video, {onBlocked = () => {}, onReady = () => {}, now = () => performance.now(), schedule = setTimeout, cancel = clearTimeout} = {}) {
+    constructor(video, {onBlocked = () => {}, onReady = () => {}, now = () => performance.now(), schedule = (fn, ms) => setTimeout(fn, ms), cancel = id => clearTimeout(id)} = {}) {
       Object.assign(this, {video, onBlocked, onReady, now, schedule, cancel});
       this.active = false; this.manual = false; this.loaded = false;
       this.primed = false; this.priming = false; this.blocked = false;
