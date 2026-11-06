@@ -200,3 +200,25 @@
 @media (max-width: 640px) {
   .scroll-home { --header-height: 88px; }
 }
+
+/* App Store badge, Penpals waitlist and the closing call to action. */
+.visually-hidden { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+.store-badge { margin: 30px 0 0; }
+.store-badge a { display: inline-block; border-radius: 9px; }
+.store-badge img { display: block; width: auto; height: 50px; }
+.opening .store-badge + .opening-availability { margin-top: 14px; }
+.penpals-section { flex-direction: column; gap: 34px; }
+.penpals-signup { max-width: 560px; font-family: var(--mono); }
+.penpals-signup p { margin: 0 0 18px; font-size: 15px; line-height: 1.7; color: var(--muted); }
+.penpals-signup .button { display: inline-block; border: 0; cursor: pointer; text-decoration: none; font-family: var(--mono); font-size: 13px; padding: 12px 22px; }
+.signup-form { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+.signup-form input { font: 15px var(--mono); padding: 11px 14px; min-width: min(300px, 100%); border: 1px solid var(--line); border-radius: 3px; background: var(--card); color: var(--ink); }
+.signup-form input:focus-visible { outline: 3px solid var(--leaf); outline-offset: 2px; }
+.signup-fallback { margin: 0; }
+.closing-cta { text-align: center; padding: 40px 22px 10px; }
+.closing-cta .store-badge { margin-top: 0; }
+.closing-cta .opening-availability { margin-top: 14px; }
+@media (max-width: 480px) {
+  .store-badge img { height: 46px; }
+  .penpals-signup p { font-size: 13px; }
+}

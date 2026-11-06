@@ -19,9 +19,9 @@ The homepage is deliberately limited to this sequence:
 11. Coming soon: Foldtype Penpals.
 12. Supplied Foldtype banner.
 
-The homepage has no extra feature cards, galleries, FAQ or illustrations. A small Support / Privacy footer provides direct access to the completed public pages. Press remains a separate draft and is not linked from the public footer.
+The homepage has no extra feature cards, galleries, FAQ or illustrations. Marketing additions are kept small: Apple's official App Store badge under the tagline and again before the banner, a Penpals waitlist under item 11, and a Support / Privacy footer with optional social links. Every page carries the Smart App Banner meta tag, and the homepage has `SoftwareApplication` structured data.
 
-Edit homepage copy and media paths directly in `index.html`. `content.js` holds shared logo, contact and App Store configuration. `scroll.css` contains the homepage layout; `style.css`, `home.css` and `foldtype.css` retain shared template/document styling.
+Edit homepage copy and media paths directly in `index.html`. `content.js` holds shared logo, contact and App Store configuration, plus the Penpals waitlist form (`penpalsForm`: leave `action` empty to show the email-link fallback, or paste a Buttondown/Kit form URL) and footer social links (`social`: empty values are hidden). Set `appStoreUrl` to an App Store Connect campaign link to count website downloads; all badges and store links follow it. `scroll.css` contains the homepage layout; `style.css`, `home.css` and `foldtype.css` retain shared template/document styling. Press remains a separate draft and is not linked from the public footer.
 
 The paper background keeps the original colour with a small tiled grain overlay. Special Elite provides the worn typewriter headings; Courier Prime provides readable body and navigation text. Both fonts are served locally from `images/fonts/` with their licences. The iPhone/iPad availability heading is smaller than the main statements.
 

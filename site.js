@@ -14,8 +14,27 @@
       link.href = config.appStoreUrl;
       link.textContent = link.classList.contains('pill') ? 'Get the app' : 'Download on the App Store';
     });
+    // Badges and plain links keep their own content; only the destination changes.
+    document.querySelectorAll('[data-store-href]').forEach(link => { link.href = config.appStoreUrl; });
     document.querySelectorAll('[data-coming-soon]').forEach(el => { el.hidden = true; });
   }
+  const signup = config.penpalsForm || {};
+  if (/^https:\/\//.test(signup.action || '')) {
+    document.querySelectorAll('[data-penpals-form]').forEach(form => {
+      form.action = signup.action;
+      form.querySelector('[data-penpals-input]').name = signup.emailField || 'email';
+      form.hidden = false;
+    });
+    document.querySelectorAll('[data-penpals-mailto]').forEach(el => { el.hidden = true; });
+  }
+  Object.entries(config.social || {}).forEach(([label, url]) => {
+    if (!/^https:\/\//.test(url || '')) return;
+    document.querySelectorAll('[data-social-nav]').forEach(nav => {
+      const link = document.createElement('a');
+      link.href = url; link.textContent = label; link.rel = 'me noopener';
+      nav.append(link);
+    });
+  });
   if (/^[^\s@?]+@[^\s@?]+\.[^\s@?]+$/.test(config.supportEmail || '')) {
     document.querySelectorAll('[data-support-email]').forEach(el => {
       const link = document.createElement('a');

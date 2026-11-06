@@ -4,11 +4,12 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#f5f1e8">
+<meta name="apple-itunes-app" content="app-id=6822860496">
 <title>Foldtype. · A typewriter in your pocket.</title>
-<meta name="description" content="A typewriter in your pocket. Available now on the App Store.">
+<meta name="description" content="Foldtype turns iPhone Duo, iPhone and iPad into a typewriter. No copy, no paste, no distractions. Free on the App Store.">
 <link rel="canonical" href="https://foldleafreader.github.io/foldtype/">
 <meta property="og:title" content="Foldtype. · A typewriter in your pocket.">
-<meta property="og:description" content="A typewriter in your pocket. Available now on the App Store.">
+<meta property="og:description" content="Unfold your iPhone Duo and it becomes a typewriter. No copy, no paste, no distractions. Free on the App Store.">
 <meta property="og:type" content="website">
 <meta property="og:image" content="https://foldleafreader.github.io/foldtype/images/foldtype-banner.jpg">
 <meta property="og:image:width" content="2048">
@@ -22,10 +23,13 @@
 <link rel="stylesheet" href="style.css">
 <link rel="stylesheet" href="home.css">
 <link rel="stylesheet" href="foldtype.css?v=public-v1-pages">
-<link rel="stylesheet" href="scroll.css?v=store-link-1">
-<script src="content.js?v=store-link-2" defer></script>
-<script src="scroll-video.js" defer></script>
-<script src="site.js?v=scroll-recovery-1" defer></script>
+<link rel="stylesheet" href="scroll.css?v=marketing-1">
+<script src="content.js?v=marketing-1" defer></script>
+<script src="scroll-video.js?v=marketing-1" defer></script>
+<script src="site.js?v=marketing-1" defer></script>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"SoftwareApplication","name":"Foldtype","description":"A typewriter in your pocket. No copy, no paste, no distractions.","operatingSystem":"iOS 17, iPadOS 17","applicationCategory":"ProductivityApplication","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"author":{"@type":"Person","name":"Tevong You"},"url":"https://foldleafreader.github.io/foldtype/","installUrl":"https://apps.apple.com/app/id6822860496","image":"https://foldleafreader.github.io/foldtype/images/foldtype-banner.jpg"}
+</script>
 </head>
 <body class="home scroll-home">
 <a class="skip-link" href="#main">Skip to content</a>
@@ -37,7 +41,8 @@
 <section class="opening" aria-labelledby="foldtype-title">
   <h1 id="foldtype-title" class="reveal">Foldtype.</h1>
   <p class="opening-tagline reveal" style="--i:1">A typewriter in your pocket.</p>
-  <p class="opening-availability reveal" style="--i:2" id="get"><a href="https://apps.apple.com/app/id6822860496">Available now on the App Store</a></p>
+  <p class="store-badge reveal" style="--i:2" id="get"><a href="https://apps.apple.com/app/id6822860496" data-store-href><img src="https://toolbox.marketingtools.apple.com/api/v2/badges/download-on-the-app-store/black/en-us" alt="Download on the App Store" width="150" height="50"></a></p>
+  <p class="opening-availability reveal" style="--i:3">Free on iPhone Duo, iPhone and iPad.</p>
 </section>
 
 <section class="scroll-film" id="experience" aria-label="Mint Foldtype typewriter animation" data-film data-travel="180">
@@ -82,12 +87,26 @@
 
 <section class="scroll-copy penpals-section" aria-labelledby="penpals-title">
   <h2 id="penpals-title" data-ink>Coming soon: Foldtype Penpals.</h2>
+  <div class="penpals-signup reveal" id="penpals">
+    <p>Typewritten letters, sent to a friend. Hear first when Penpals arrives.</p>
+    <form class="signup-form" method="post" target="_blank" data-penpals-form hidden>
+      <label class="visually-hidden" for="penpals-email">Email address</label>
+      <input id="penpals-email" type="email" required autocomplete="email" placeholder="you@example.com" data-penpals-input>
+      <button class="button" type="submit">Notify me</button>
+    </form>
+    <p class="signup-fallback" data-penpals-mailto><a class="button" href="mailto:foldtypesupport@gmail.com?subject=Penpals%20waitlist&amp;body=Please%20let%20me%20know%20when%20Foldtype%20Penpals%20launches.">Join the waitlist by email</a></p>
+  </div>
+</section>
+
+<section class="closing-cta" aria-label="Get Foldtype">
+  <p class="store-badge reveal"><a href="https://apps.apple.com/app/id6822860496" data-store-href><img src="https://toolbox.marketingtools.apple.com/api/v2/badges/download-on-the-app-store/black/en-us" alt="Download on the App Store" width="150" height="50" loading="lazy"></a></p>
+  <p class="opening-availability reveal"><a href="https://youtu.be/kWYpYqQ0f7M">Watch the film</a></p>
 </section>
 
 <section class="closing-banner" aria-label="Foldtype. Typewriting. For writers.">
   <picture class="reveal"><source srcset="images/foldtype-banner-960.webp 960w, images/foldtype-banner-1920.webp 1920w" sizes="(max-width: 1160px) 100vw, 1116px" type="image/webp"><img src="images/foldtype-banner.jpg" width="2048" height="1143" alt="Foldtype. Typewriting. For writers. A vintage black typewriter on cream paper." loading="lazy" decoding="async"></picture>
 </section>
 </main>
-<footer class="home-footer"><p>© <span data-year>2026</span> Tevong You. All rights reserved.</p><nav aria-label="Footer navigation"><a href="support.html">Support</a><a href="privacy.html">Privacy</a></nav></footer>
+<footer class="home-footer"><p>© <span data-year>2026</span> Tevong You. All rights reserved.</p><nav aria-label="Footer navigation" data-social-nav><a href="support.html">Support</a><a href="privacy.html">Privacy</a></nav></footer>
 </body>
 </html>
