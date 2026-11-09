@@ -216,7 +216,7 @@
 .signup-form input:focus-visible { outline: 3px solid var(--leaf); outline-offset: 2px; }
 .signup-fallback { margin: 0; }
 /* App Store featuring, shown under the opening badge. */
-.featured { max-width: 360px; margin: 6px auto 0; font-family: var(--mono); font-size: clamp(11px, 1.3vw, 13px); line-height: 1.7; color: var(--ink); }
+.featured { max-width: 360px; margin: calc(6px + 1.7em) auto 0; font-family: var(--mono); font-size: clamp(11px, 1.3vw, 13px); line-height: 1.7; color: var(--ink); }
 .closing-cta { text-align: center; padding: 40px 22px 10px; }
 .closing-cta .store-badge { margin-top: 0; }
 .closing-cta .opening-availability { margin-top: 14px; }
